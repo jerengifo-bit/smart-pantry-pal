@@ -13,6 +13,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ComprasRouteImport } from './routes/compras'
 import { Route as DespensaRouteImport } from './routes/despensa'
 import { Route as GrabarRouteImport } from './routes/grabar'
+import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as RecetasIndexRouteImport } from './routes/recetas.index'
 import { Route as RecetasIdRouteImport } from './routes/recetas.$id'
 
@@ -36,6 +37,11 @@ const GrabarRoute = GrabarRouteImport.update({
   path: '/grabar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const OnboardingRoute = OnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const RecetasIndexRoute = RecetasIndexRouteImport.update({
   id: '/recetas/',
   path: '/recetas/',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/compras': typeof ComprasRoute
   '/despensa': typeof DespensaRoute
   '/grabar': typeof GrabarRoute
+  '/onboarding': typeof OnboardingRoute
   '/recetas/$id': typeof RecetasIdRoute
   '/recetas/': typeof RecetasIndexRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/compras': typeof ComprasRoute
   '/despensa': typeof DespensaRoute
   '/grabar': typeof GrabarRoute
+  '/onboarding': typeof OnboardingRoute
   '/recetas/$id': typeof RecetasIdRoute
   '/recetas': typeof RecetasIndexRoute
 }
@@ -69,21 +77,36 @@ export interface FileRoutesById {
   '/compras': typeof ComprasRoute
   '/despensa': typeof DespensaRoute
   '/grabar': typeof GrabarRoute
+  '/onboarding': typeof OnboardingRoute
   '/recetas/$id': typeof RecetasIdRoute
   '/recetas/': typeof RecetasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/compras' | '/despensa' | '/grabar' | '/recetas/$id' | '/recetas/'
+    | '/'
+    | '/compras'
+    | '/despensa'
+    | '/grabar'
+    | '/onboarding'
+    | '/recetas/$id'
+    | '/recetas/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compras' | '/despensa' | '/grabar' | '/recetas/$id' | '/recetas'
+  to:
+    | '/'
+    | '/compras'
+    | '/despensa'
+    | '/grabar'
+    | '/onboarding'
+    | '/recetas/$id'
+    | '/recetas'
   id:
     | '__root__'
     | '/'
     | '/compras'
     | '/despensa'
     | '/grabar'
+    | '/onboarding'
     | '/recetas/$id'
     | '/recetas/'
   fileRoutesById: FileRoutesById
@@ -93,6 +116,7 @@ export interface RootRouteChildren {
   ComprasRoute: typeof ComprasRoute
   DespensaRoute: typeof DespensaRoute
   GrabarRoute: typeof GrabarRoute
+  OnboardingRoute: typeof OnboardingRoute
   RecetasIdRoute: typeof RecetasIdRoute
   RecetasIndexRoute: typeof RecetasIndexRoute
 }
@@ -127,6 +151,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GrabarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/onboarding': {
+      id: '/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof OnboardingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/recetas/': {
       id: '/recetas/'
       path: '/recetas'
@@ -149,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComprasRoute: ComprasRoute,
   DespensaRoute: DespensaRoute,
   GrabarRoute: GrabarRoute,
+  OnboardingRoute: OnboardingRoute,
   RecetasIdRoute: RecetasIdRoute,
   RecetasIndexRoute: RecetasIndexRoute,
 }
