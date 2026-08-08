@@ -68,7 +68,8 @@ export function PantryProvider({ children }: { children: ReactNode }) {
           const next = [...prev];
           for (const it of items) {
             const i = next.findIndex((p) => norm(p.name) === norm(it.name));
-            if (i >= 0) next[i] = { ...next[i], ...it, id: next[i].id };
+            const existing = next[i];
+            if (existing) next[i] = { ...existing, ...it, id: existing.id };
             else next.push(it);
           }
           return next;
