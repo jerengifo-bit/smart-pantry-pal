@@ -83,7 +83,7 @@ export function PantryProvider({ children }: { children: ReactNode }) {
           const next = [...prev];
           for (const n of names) {
             if (next.some((s) => norm(s.name) === norm(n))) continue;
-            next.push({ id: `s-${Date.now()}-${n}`, name: n, bought: false, from });
+            next.push({ id: `s-${Date.now()}-${n}`, name: n, bought: false, ...(from ? { from } : {}) });
           }
           return next;
         }),
