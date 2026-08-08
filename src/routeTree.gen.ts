@@ -10,11 +10,25 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ComprasRouteImport } from './routes/compras'
+import { Route as DespensaRouteImport } from './routes/despensa'
 import { Route as GrabarRouteImport } from './routes/grabar'
+import { Route as RecetasIndexRouteImport } from './routes/recetas.index'
+import { Route as RecetasIdRouteImport } from './routes/recetas.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComprasRoute = ComprasRouteImport.update({
+  id: '/compras',
+  path: '/compras',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DespensaRoute = DespensaRouteImport.update({
+  id: '/despensa',
+  path: '/despensa',
   getParentRoute: () => rootRouteImport,
 } as any)
 const GrabarRoute = GrabarRouteImport.update({
@@ -22,31 +36,65 @@ const GrabarRoute = GrabarRouteImport.update({
   path: '/grabar',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RecetasIndexRoute = RecetasIndexRouteImport.update({
+  id: '/recetas/',
+  path: '/recetas/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecetasIdRoute = RecetasIdRouteImport.update({
+  id: '/recetas/$id',
+  path: '/recetas/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/compras': typeof ComprasRoute
+  '/despensa': typeof DespensaRoute
   '/grabar': typeof GrabarRoute
+  '/recetas/$id': typeof RecetasIdRoute
+  '/recetas/': typeof RecetasIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/compras': typeof ComprasRoute
+  '/despensa': typeof DespensaRoute
   '/grabar': typeof GrabarRoute
+  '/recetas/$id': typeof RecetasIdRoute
+  '/recetas': typeof RecetasIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/compras': typeof ComprasRoute
+  '/despensa': typeof DespensaRoute
   '/grabar': typeof GrabarRoute
+  '/recetas/$id': typeof RecetasIdRoute
+  '/recetas/': typeof RecetasIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/grabar'
+  fullPaths:
+    '/' | '/compras' | '/despensa' | '/grabar' | '/recetas/$id' | '/recetas/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/grabar'
-  id: '__root__' | '/' | '/grabar'
+  to: '/' | '/compras' | '/despensa' | '/grabar' | '/recetas/$id' | '/recetas'
+  id:
+    | '__root__'
+    | '/'
+    | '/compras'
+    | '/despensa'
+    | '/grabar'
+    | '/recetas/$id'
+    | '/recetas/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ComprasRoute: typeof ComprasRoute
+  DespensaRoute: typeof DespensaRoute
   GrabarRoute: typeof GrabarRoute
+  RecetasIdRoute: typeof RecetasIdRoute
+  RecetasIndexRoute: typeof RecetasIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -58,6 +106,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/compras': {
+      id: '/compras'
+      path: '/compras'
+      fullPath: '/compras'
+      preLoaderRoute: typeof ComprasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/despensa': {
+      id: '/despensa'
+      path: '/despensa'
+      fullPath: '/despensa'
+      preLoaderRoute: typeof DespensaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/grabar': {
       id: '/grabar'
       path: '/grabar'
@@ -65,12 +127,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof GrabarRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/recetas/': {
+      id: '/recetas/'
+      path: '/recetas'
+      fullPath: '/recetas/'
+      preLoaderRoute: typeof RecetasIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recetas/$id': {
+      id: '/recetas/$id'
+      path: '/recetas/$id'
+      fullPath: '/recetas/$id'
+      preLoaderRoute: typeof RecetasIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ComprasRoute: ComprasRoute,
+  DespensaRoute: DespensaRoute,
   GrabarRoute: GrabarRoute,
+  RecetasIdRoute: RecetasIdRoute,
+  RecetasIndexRoute: RecetasIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

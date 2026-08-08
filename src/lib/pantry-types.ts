@@ -4,8 +4,8 @@ export type PantryItem = {
   id: string;
   name: string;
   qty: Qty;
-  expiresAt?: string; // ISO date
-  emoji?: string;
+  expiresAt?: string | undefined; // ISO date
+  emoji?: string | undefined;
 };
 
 export type MealType = "desayuno" | "almuerzo" | "cena" | "postre";
