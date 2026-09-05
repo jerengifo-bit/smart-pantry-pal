@@ -5,6 +5,7 @@ import { RecipeCard } from "@/components/RecipeCard";
 import { usePantry } from "@/lib/pantry-store";
 import type { MealType } from "@/lib/pantry-types";
 import { toast } from "sonner";
+import { Search } from "lucide-react";
 
 export const Route = createFileRoute("/recetas/")({
   head: () => ({
@@ -33,8 +34,14 @@ const filters: Array<{ value: MealType | "todas"; label: string }> = [
 function RecipesPage() {
   const { recipes, missingFor, addShopping } = usePantry();
   const [filter, setFilter] = useState<MealType | "todas">("todas");
+  const [searchQuery, setSearchQuery] = useState("");
 
-  const visible = recipes.filter((r) => filter === "todas" || r.meal === filter);
+  const visible = recipes.filter((r) => {
+    const matchesFilter = filter === "todas" || r.meal === filter;
+    const matchesSearch = r.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                          r.main.some((m) => m.toLowerCase().includes(searchQuery.toLowerCase()));
+    return matchesFilter && matchesSearch;
+  });
   const ready = visible.filter((r) => missingFor(r).length === 0);
   const almost = visible.filter((r) => missingFor(r).length > 0);
 
@@ -45,6 +52,17 @@ function RecipesPage() {
 
   return (
     <AppLayout title="Recetas" subtitle="Según lo que hay en tu despensa">
+      <div className="mb-5 relative max-w-md">
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <input
+          type="search"
+          placeholder="Buscar recetas o ingredientes..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full rounded-2xl bg-secondary/60 pl-10 pr-4 py-2.5 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30 transition-all border border-transparent focus:border-border"
+        />
+      </div>
+
       <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 md:mx-0 md:px-0">
         {filters.map((f) => (
           <button

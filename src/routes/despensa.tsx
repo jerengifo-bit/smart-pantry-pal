@@ -60,7 +60,9 @@ function PantryPage() {
     if (!draft.name.trim()) return;
     const num = Number(draft.qty);
     const qty: PantryItem["qty"] =
-      draft.qty.trim() !== "" && Number.isFinite(num) ? { kind: "count", value: num } : { kind: "enough" };
+      draft.qty.trim() !== "" && Number.isFinite(num)
+        ? { kind: "count", value: num }
+        : { kind: "enough" };
     if (editing) {
       updatePantryItem(editing.id, {
         name: draft.name.trim(),
@@ -125,7 +127,12 @@ function PantryPage() {
                   )}
                 </div>
                 <div className="flex shrink-0 gap-1">
-                  <Button variant="ghost" size="icon" aria-label="Editar" onClick={() => openEdit(item)}>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Editar"
+                    onClick={() => openEdit(item)}
+                  >
                     <Pencil className="h-4 w-4" />
                   </Button>
                   <Button

@@ -9,13 +9,13 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { PantryProvider, usePantry } from "../lib/pantry-store";
 import { Toaster } from "../components/ui/sonner";
-
+import { supabase } from "../lib/supabase";
 function NotFoundComponent() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
@@ -125,13 +125,43 @@ function RootShell({ children }: { children: ReactNode }) {
   );
 }
 
+function AuthGate({ children }: { children: ReactNode }) {
+  const [session, setSession] = useState<any>(undefined);
+  const navigate = useNavigate();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (session === null && pathname !== "/login") {
+      navigate({ to: "/login" });
+    }
+  }, [session, pathname, navigate]);
+
+  if (session === undefined) return null; // loading
+
+  return <>{children}</>;
+}
+
 function OnboardingGate({ children }: { children: ReactNode }) {
   const { ready, profile } = usePantry();
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
-    if (ready && !profile.onboarded && pathname !== "/onboarding") {
+    if (ready && !profile.onboarded && pathname !== "/onboarding" && pathname !== "/login") {
       navigate({ to: "/onboarding" });
     }
   }, [ready, profile.onboarded, pathname, navigate]);
@@ -145,10 +175,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <PantryProvider>
-        <OnboardingGate>
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </OnboardingGate>
+        <AuthGate>
+          <OnboardingGate>
+            {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+            <Outlet />
+          </OnboardingGate>
+        </AuthGate>
         <Toaster position="top-center" />
       </PantryProvider>
     </QueryClientProvider>

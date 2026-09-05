@@ -6,6 +6,7 @@ import arrozImg from "@/assets/receta-arroz.jpg";
 import pastaImg from "@/assets/receta-pasta.jpg";
 import sopaImg from "@/assets/receta-sopa.jpg";
 import platanoImg from "@/assets/receta-platano.jpg";
+import { peruvianRecipes } from "./peruvian-recipes";
 
 const iso = (offsetDays: number) => {
   const d = new Date();
@@ -18,8 +19,20 @@ export const mockPantry: PantryItem[] = [
   { id: "p2", name: "Cebolla", qty: { kind: "count", value: 3 }, emoji: "🧅" },
   { id: "p3", name: "Arroz", qty: { kind: "enough" }, emoji: "🍚" },
   { id: "p4", name: "Huevo", qty: { kind: "count", value: 6 }, emoji: "🥚", expiresAt: iso(9) },
-  { id: "p5", name: "Leche", qty: { kind: "count", value: 1, unit: "litro" }, emoji: "🥛", expiresAt: iso(1) },
-  { id: "p6", name: "Pollo", qty: { kind: "count", value: 500, unit: "g" }, emoji: "🍗", expiresAt: iso(4) },
+  {
+    id: "p5",
+    name: "Leche",
+    qty: { kind: "count", value: 1, unit: "litro" },
+    emoji: "🥛",
+    expiresAt: iso(1),
+  },
+  {
+    id: "p6",
+    name: "Pollo",
+    qty: { kind: "count", value: 500, unit: "g" },
+    emoji: "🍗",
+    expiresAt: iso(4),
+  },
   { id: "p7", name: "Avena", qty: { kind: "enough" }, emoji: "🥣" },
   { id: "p8", name: "Plátano", qty: { kind: "count", value: 4 }, emoji: "🍌" },
   { id: "p9", name: "Zanahoria", qty: { kind: "count", value: 2 }, emoji: "🥕" },
@@ -121,6 +134,7 @@ export const mockRecipes: Recipe[] = [
       "Carameliza los plátanos 3 minutos por lado y espolvorea canela.",
     ],
   },
+  ...peruvianRecipes,
 ];
 
 export const mockShopping: ShoppingItem[] = [

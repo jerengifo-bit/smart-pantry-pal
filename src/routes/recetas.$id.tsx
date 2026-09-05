@@ -86,7 +86,9 @@ function RecipeDetail() {
                 >
                   {ok ? <Check className="h-3.5 w-3.5" /> : <X className="h-3.5 w-3.5" />}
                 </span>
-                <span className={ok ? "font-medium" : "font-medium text-muted-foreground"}>{ing}</span>
+                <span className={ok ? "font-medium" : "font-medium text-muted-foreground"}>
+                  {ing}
+                </span>
                 <span className="ml-auto shrink-0 text-xs text-muted-foreground">
                   {ok ? "en tu despensa" : "te falta"}
                 </span>

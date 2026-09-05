@@ -1,5 +1,5 @@
 import { Link, useRouterState } from "@tanstack/react-router";
-import { Home, Carrot, ChefHat, ShoppingCart, Mic } from "lucide-react";
+import { Home, Carrot, ChefHat, ShoppingCart, Mic, MessageCircle } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -8,22 +8,30 @@ const nav = [
   { to: "/despensa", label: "Despensa", icon: Carrot },
   { to: "/recetas", label: "Recetas", icon: ChefHat },
   { to: "/compras", label: "Compras", icon: ShoppingCart },
+  { to: "/chef", label: "Chef", icon: MessageCircle },
 ] as const;
 
 export function AppLayout({
   title,
   subtitle,
   children,
+  fullHeight = false,
 }: {
   title: string;
   subtitle?: string;
   children: ReactNode;
+  fullHeight?: boolean;
 }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isActive = (to: string) => (to === "/" ? pathname === "/" : pathname.startsWith(to));
 
   return (
-    <div className="min-h-screen bg-background md:flex">
+    <div
+      className={cn(
+        "bg-background md:flex",
+        fullHeight ? "h-screen overflow-hidden" : "min-h-screen",
+      )}
+    >
       {/* Desktop sidebar */}
       <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-border bg-sidebar px-4 py-6 md:flex">
         <Link to="/" className="mb-8 flex items-center gap-2 px-2">
@@ -80,14 +88,21 @@ export function AppLayout({
           </div>
         </header>
 
-        <main className="mx-auto w-full max-w-4xl flex-1 px-4 pb-28 pt-5 md:px-8 md:pb-12">
+        <main
+          className={cn(
+            "mx-auto w-full",
+            fullHeight
+              ? "flex-1 flex flex-col h-[calc(100vh-73px)]"
+              : "max-w-4xl flex-1 px-4 pb-28 pt-5 md:px-8 md:pb-12",
+          )}
+        >
           {children}
         </main>
       </div>
 
       {/* Mobile bottom nav */}
       <nav className="fixed inset-x-0 bottom-0 z-30 border-t border-border bg-card/95 backdrop-blur md:hidden">
-        <div className="grid grid-cols-4">
+        <div className="grid grid-cols-5 pb-[env(safe-area-inset-bottom)]">
           {nav.map((n) => (
             <Link
               key={n.to}

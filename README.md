@@ -4,26 +4,15 @@
 
 ---
 
-
-
 Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a las personas a saber qué cocinar con lo que tienen en casa, usando registro por voz. Quiero el prototipo visual completo e interactivo, con datos de prueba (mocks), para poder mostrarlo como demo. El diseño debe ser limpio, cálido y apetitoso (colores tipo verde/naranja suave, tipografía legible, estilo moderno tipo app de productividad de comida), mobile-first pero que también se vea bien en desktop.
 
-
-
-
 ## Páginas y funcionalidades:
-
-
-
 
 ### 1. Onboarding / Perfil
 
 - Pantalla simple de configuración inicial: nombre del usuario y "¿para cuántas personas cocinas normalmente?" (selector numérico, valor por defecto 2).
 
 - Este valor debe quedar guardado como el "default" del perfil.
-
-
-
 
 ### 2. Home / Dashboard
 
@@ -37,9 +26,6 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 
 - Debajo, una sección "Recetas sugeridas para hoy" con cards de recetas (ver punto 5)
 
-
-
-
 ### 3. Registro por voz (pantalla de grabación)
 
 - Interfaz de grabación de audio: botón grande de micrófono, animación simple mientras "grava" (simulado), y botón de detener.
@@ -50,9 +36,6 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 
 - Botón "Confirmar y agregar a mi despensa".
 
-
-
-
 ### 4. Despensa
 
 - Vista de lista/grid de todos los productos registrados, mostrando: nombre, cantidad (número o "suficiente"), y fecha de vencimiento si aplica.
@@ -62,9 +45,6 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 - Botón flotante para agregar producto manualmente (como alternativa al audio).
 
 - Indicador visual (ej. badge de color) para productos próximos a vencer.
-
-
-
 
 ### 5. Recetas sugeridas
 
@@ -78,9 +58,6 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 
 - Filtro simple por tipo de comida: desayuno / almuerzo / cena / postre.
 
-
-
-
 ### 6. Lista de compras
 
 - Lista de productos pendientes de comprar (los que se agregaron desde las recetas, o agregados manualmente).
@@ -91,17 +68,11 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 
 - Botón para agregar un producto manualmente a la lista.
 
-
-
-
 ## Navegación
 
 - Barra de navegación inferior (mobile) o lateral (desktop) con 4 secciones: Home, Despensa, Recetas, Lista de compras.
 
 - El usuario debe poder moverse libremente entre todas las secciones desde cualquier pantalla.
-
-
-
 
 ## Datos de prueba (mocks) que debes incluir:
 
@@ -112,9 +83,6 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 - Al menos 3 productos de ejemplo en la lista de compras.
 
 - Todo el procesamiento de audio y el matching de recetas puede estar simulado con estos datos de ejemplo — no necesito que funcione con lógica real todavía, solo que la experiencia se vea y se sienta completa.
-
-
-
 
 ## Notas importantes:
 
@@ -127,9 +95,6 @@ Crea una web app llamada **"Despensa Inteligente"**, un asistente que ayuda a la
 - Usa estados vacíos amigables (ej. si la despensa está vacía: "Tu despensa está vacía, grábate diciendo qué tienes en casa").
 
 - Diseño profesional y pulido, no de wireframe básico.
-
-
-
 
 ---
 

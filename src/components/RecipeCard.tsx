@@ -48,11 +48,7 @@ export function RecipeCard({
       </Link>
       {!ready && onAddMissing && (
         <div className="px-4 pb-4">
-          <Button
-            variant="secondary"
-            className="w-full"
-            onClick={() => onAddMissing(missing)}
-          >
+          <Button variant="secondary" className="w-full" onClick={() => onAddMissing(missing)}>
             <ShoppingBasket className="h-4 w-4" /> Agregar faltantes a mi lista
           </Button>
         </div>

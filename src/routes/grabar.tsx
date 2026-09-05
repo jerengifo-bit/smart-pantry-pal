@@ -34,12 +34,59 @@ function RecordPage() {
   const [servings, setServings] = useState(profile.servings);
   const [items, setItems] = useState<Detected[]>([]);
 
+  const startRecording = () => {
+    // @ts-ignore
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      toast.error("Tu navegador no soporta el reconocimiento de voz.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "es-ES";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setStage("recording");
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      setStage("processing");
+
+      // Parseo muy básico (idealmente esto pasaría por un LLM, pero por ahora extraemos palabras)
+      // Ejemplo: "tengo manzanas y dos peras"
+      const words = transcript.split(" ");
+      const newItems: Detected[] = words
+        .filter(
+          (w: string) =>
+            w.length > 3 &&
+            w.toLowerCase() !== "tengo" &&
+            w.toLowerCase() !== "unos" &&
+            w.toLowerCase() !== "unas",
+        )
+        .map((w: string) => ({ name: w, qty: "suficiente" }));
+
+      setTimeout(() => {
+        setItems(newItems.length > 0 ? newItems : [{ name: transcript, qty: "suficiente" }]);
+        setStage("review");
+      }, 1000);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error("Speech error", event.error);
+      toast.error("Error al reconocer la voz. Intenta de nuevo.");
+      setStage("idle");
+    };
+
+    recognition.start();
+  };
+
   const stop = () => {
+    // Ya no hace falta el setTimeout falso porque el reconocimiento se detiene solo tras hablar
+    // Opcionalmente podemos detenerlo forzosamente si guardamos la referencia a 'recognition'
     setStage("processing");
-    setTimeout(() => {
-      setItems(mockVoiceResult.map((v) => ({ name: v.name, qty: v.qty })));
-      setStage("review");
-    }, 1800);
   };
 
   const confirm = () => {
@@ -50,7 +97,10 @@ function RecordPage() {
         return {
           id: `p-${Date.now()}-${idx}`,
           name: i.name.trim(),
-          qty: Number.isFinite(num) && i.qty.trim() !== "" ? { kind: "count", value: num } : { kind: "enough" },
+          qty:
+            Number.isFinite(num) && i.qty.trim() !== ""
+              ? { kind: "count", value: num }
+              : { kind: "enough" },
         } as PantryItem;
       });
     addPantryItems(parsed);
@@ -87,7 +137,7 @@ function RecordPage() {
           </div>
 
           <button
-            onClick={() => setStage("recording")}
+            onClick={startRecording}
             className="relative mt-10 grid h-40 w-40 place-items-center rounded-full gradient-mic text-primary-foreground shadow-[var(--shadow-lift)] transition-transform hover:scale-105"
           >
             <Mic className="h-14 w-14" />
@@ -137,23 +187,30 @@ function RecordPage() {
       {stage === "review" && (
         <div>
           <p className="text-sm text-muted-foreground">
-            Detectamos estos productos para {servings}{" "}
-            {servings === 1 ? "persona" : "personas"}. Puedes corregirlos antes de confirmar.
+            Detectamos estos productos para {servings} {servings === 1 ? "persona" : "personas"}.
+            Puedes corregirlos antes de confirmar.
           </p>
           <ul className="mt-4 space-y-2">
             {items.map((it, idx) => (
-              <li key={idx} className="surface-card grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 p-3">
+              <li
+                key={idx}
+                className="surface-card grid grid-cols-[minmax(0,1fr)_auto_auto] items-center gap-2 p-3"
+              >
                 <Input
                   value={it.name}
                   onChange={(e) =>
-                    setItems((p) => p.map((x, i) => (i === idx ? { ...x, name: e.target.value } : x)))
+                    setItems((p) =>
+                      p.map((x, i) => (i === idx ? { ...x, name: e.target.value } : x)),
+                    )
                   }
                   className="min-w-0"
                 />
                 <Input
                   value={it.qty}
                   onChange={(e) =>
-                    setItems((p) => p.map((x, i) => (i === idx ? { ...x, qty: e.target.value } : x)))
+                    setItems((p) =>
+                      p.map((x, i) => (i === idx ? { ...x, qty: e.target.value } : x)),
+                    )
                   }
                   className="w-28 shrink-0"
                   placeholder="suficiente"
